@@ -113,6 +113,7 @@ public class Escuela {
             do
             {
                 flag = true;
+                System.out.println("Alumno [ " + i+1 + " ]");
                 System.out.println("¿Cual es el código del alumno?");
                 try {
                     codigoAlumno = LectoraTeclado.leeEnteroSimple();
@@ -188,6 +189,7 @@ public class Escuela {
                     System.err.println(ele.getMessage());
                 }
             } while(!flag);
+            System.out.println("");
             alumno[i] = new Alumno(codigoAlumno,nombreAlumno,apellidoPaterno,apellidoMaterno,edadAlumno,sexoAlumno);
         }
         try
@@ -605,11 +607,11 @@ public class Escuela {
                                     System.out.println("El sexo del alumno es " + line);
                                     if(line.equals("MASCULINO")) {
                                         nuevoDato = "FEMENINO"; 
-                                        System.out.println("Se cambio el sexo a femenino");
+                                        System.out.println("Se cambio el sexo a FEMENINO");
                                     }
                                     if(line.equals("FEMENINO")) {
                                         nuevoDato = "MASCULINO"; 
-                                        System.out.println("Se cambio el sexo a masculino");
+                                        System.out.println("Se cambio el sexo a MASCULINO");
                                     }
                                     if(!line.equals("MASCULINO") && !line.equals("FEMENINO")){
                                         nuevoDato = "FEMENINO";

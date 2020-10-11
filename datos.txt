@@ -19,4 +19,16 @@ hy
 7
 FEMENINO
 
+88
+sds
+f
+d
+6
+MASCULINO
 
+567
+fhg
+gh
+fh
+5
+FEMENINO
