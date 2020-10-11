@@ -23,12 +23,10 @@ package escuela;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -106,8 +104,7 @@ public class Escuela {
         PrintWriter pw = null;
         Scanner read = new Scanner(System.in);
         int cantidadAlumnos, codigoAlumno=0,edadAlumno=0;
-        String nombreAlumno = "", apellidoPaterno="",apellidoMaterno="",sexoAlumnoAux = "";
-        char sexoAlumno;
+        String nombreAlumno = "", apellidoPaterno="",apellidoMaterno="",sexoAlumno = "";
         System.out.println("¿Cuantos alumnos desea agregar?");
         cantidadAlumnos = read.nextInt();
         Alumno alumno[] = new Alumno[cantidadAlumnos];
@@ -175,22 +172,23 @@ public class Escuela {
             
             do
             {
-                System.out.println("¿Cual es el sexo del alumno? [m = masculino, f=femenino]");
-                sexoAlumnoAux = read.next();
-                sexoAlumno = sexoAlumnoAux.charAt(0);
-                if (sexoAlumno == 'M' || sexoAlumno == 'F' || sexoAlumno == 'm' || sexoAlumno == 'f') {
-                    flag = true;
-                    sexoAlumno = Character.toUpperCase(sexoAlumno);
-                } else {
+                System.out.println("¿Cual es el sexo del alumno?");
+                try {
+                    sexoAlumno = LectoraTeclado.leeCadena();
+                    System.out.println(":o :" + sexoAlumno);
+                    if (sexoAlumno.equals("MASCULINO") || sexoAlumno.equals("FEMENINO") || sexoAlumno.equals("masculino") || sexoAlumno.equals("femenino")) {
+                        flag = true;
+                        sexoAlumno = sexoAlumno.toUpperCase();
+                    } else {
+                        flag = false;
+                        System.out.println("Debes ingresar alguna de estas opciones [ masculino | femenino]");
+                    }
+                } catch (ExcepcionLecturaEntrada ele){
                     flag = false;
-                    System.out.println("Debes ingresar alguna de estas opciones [ M m F f ]");
-                    
+                    System.err.println(ele.getMessage());
                 }
-                
             } while(!flag);
-            
             alumno[i] = new Alumno(codigoAlumno,nombreAlumno,apellidoPaterno,apellidoMaterno,edadAlumno,sexoAlumno);
-
         }
         try
         {
@@ -232,10 +230,8 @@ public class Escuela {
     
     public static void filtrarPorSexo() throws FileNotFoundException, IOException {
         int numLine,lineCount;
-        String sexoAlumnoAux;
-        char sexoAlumno;
+        String sexoAlumno="";
         boolean flag;
-        Scanner read = new Scanner(System.in);
         String line;
         File archivo = new File(nombreArchivo);
         if(!archivo.exists()) {
@@ -247,18 +243,20 @@ public class Escuela {
             int totalAlumnos = 0;
             do
             {
-                System.out.println("¿Cual es el sexo que desea buscar? [m = masculino, f=femenino]");
-                sexoAlumnoAux = read.next();
-                sexoAlumno = sexoAlumnoAux.charAt(0);
-                if (sexoAlumno == 'M' || sexoAlumno == 'F' || sexoAlumno == 'm' || sexoAlumno == 'f') {
-                    flag = true;
-                    sexoAlumno = Character.toUpperCase(sexoAlumno);
-                } else {
+                System.out.println("¿Cual es el sexo de los alumnos que desea filtrar? [ masculino | femenino ]");
+                try {
+                    sexoAlumno = LectoraTeclado.leeCadena();
+                    if (sexoAlumno.equals("MASCULINO") || sexoAlumno.equals("FEMENINO") || sexoAlumno.equals("masculino") || sexoAlumno.equals("femenino")) {
+                        flag = true;
+                        sexoAlumno = sexoAlumno.toUpperCase();
+                    } else {
+                        flag = false;
+                        System.out.println("Debes ingresar alguna de estas opciones [ masculino | femenino ]");
+                    }
+                } catch (ExcepcionLecturaEntrada ele){
                     flag = false;
-                    System.out.println("Debes ingresar alguna de estas opciones [ M m F f ]");
-                    
+                    System.err.println(ele.getMessage());
                 }
-                
             } while(!flag);
             try (FileReader fr = new FileReader(nombreArchivo)) {
                 BufferedReader br = new BufferedReader(fr);
@@ -290,12 +288,12 @@ public class Escuela {
                     numLine++;
                     
                     line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLine);
-                    list[i].setSexo(line.charAt(0));
+                    list[i].setSexo(line);
                     numLine+=2;
                 }
                 
                 for(int i=0; i<totalAlumnos;i++) {
-                    if(list[i].getSexo() == sexoAlumno) {
+                    if(list[i].getSexo().equals(sexoAlumno)) {
                         System.out.println("Código: " + list[i].getCodigo());
                         System.out.println("Nombre: " + list[i].getNombre());
                         System.out.println("Apellido paterno: " + list[i].getApellidoPaterno());
@@ -425,7 +423,7 @@ public class Escuela {
                 numLine++;
                         
                 line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLine);
-                list[i].setSexo(line.charAt(0));
+                list[i].setSexo(line);
                 numLine+=2;
             }
             Arrays.sort(list);
@@ -604,26 +602,25 @@ public class Escuela {
                                 case 5:
                                     numLineAux = numLine + 5;
                                     line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLineAux);
-                                    System.out.println("El sexo actual del alumno es " + line);
-                                    if(line == "M"){
-                                        nuevoDato = "F";
-                                        System.out.println("El sexo fue cambiado a F");
+                                    System.out.println("El sexo del alumno es " + line);
+                                    if(line.equals("MASCULINO")) {
+                                        nuevoDato = "FEMENINO"; 
+                                        System.out.println("Se cambio el sexo a femenino");
                                     }
-                                    if(line == "F") {
-                                        nuevoDato = "M";
-                                        System.out.println("El sexo fue cambiado a M");
+                                    if(line.equals("FEMENINO")) {
+                                        nuevoDato = "MASCULINO"; 
+                                        System.out.println("Se cambio el sexo a masculino");
                                     }
-                                    if(line != "M" && line != "F"){
-                                        nuevoDato = "M";
-                                        System.out.println(":o");
+                                    if(!line.equals("MASCULINO") && !line.equals("FEMENINO")){
+                                        nuevoDato = "FEMENINO";
                                     }
                                     for (i = 0; i < fileContent.size(); i++) {
                                         if (fileContent.get(i).equals(line)) {
-                                            fileContent.set(i, nuevoDato);
-                                            break;
+                                           fileContent.set(i, nuevoDato);
+                                           break;
                                         }
                                     }
-                                    Files.write(Paths.get(nombreArchivo), fileContent, StandardCharsets.UTF_8);
+                                        Files.write(Paths.get(nombreArchivo), fileContent, StandardCharsets.UTF_8);
                                     break;
                             }
                         }while(opc!=6);

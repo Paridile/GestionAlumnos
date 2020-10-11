@@ -15,9 +15,9 @@ public class Alumno implements Comparable<Alumno>{
     private String apellidoPaterno;
     private String apellidoMaterno;
     private int edad;
-    private char sexo;
+    private String sexo;
 
-    public Alumno(int codigo, String nombre, String apellidoPaterno, String apellidoMaterno, int edad, char sexo) {
+    public Alumno(int codigo, String nombre, String apellidoPaterno, String apellidoMaterno, int edad, String sexo) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -80,11 +80,11 @@ public class Alumno implements Comparable<Alumno>{
         this.edad = edad;
     }
 
-    public char getSexo() {
+    public String getSexo() {
         return sexo;
     }
 
-    public void setSexo(char sexo) {
+    public void setSexo(String sexo) {
         this.sexo = sexo;
     }
 
