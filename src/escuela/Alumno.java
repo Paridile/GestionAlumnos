@@ -90,12 +90,12 @@ public class Alumno implements Comparable<Alumno>{
 
         static void imprimeArray(Alumno[] array) {
         for (Alumno i : array) {
-            System.out.println( "Codigo: " + i.getCodigo() + " " 
-                                + "Nombre: " + i.getNombre() + " "
-                                + "Ap: " + i.getApellidoPaterno()+ " "
-                                + "Am: " + i.getApellidoMaterno()+ " "
-                                + "Edad: " + i.getEdad() + " "
-                                + "Sexo: " + i.getSexo() + " ");
+            System.out.println( "Edad: " + i.getEdad() + "    "
+                                + "Codigo: " + i.getCodigo() + "    " 
+                                + "Nombre: " + i.getNombre() + "    "
+                                + "Ap: " + i.getApellidoPaterno()+ "    "
+                                + "Am: " + i.getApellidoMaterno()+ "    "
+                                + "Sexo: " + i.getSexo());
         }
     }
     

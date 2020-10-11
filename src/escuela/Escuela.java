@@ -43,29 +43,16 @@ public class Escuela {
     static String nombreArchivo = "datos.txt";
 
     public static void main(String[] args) throws IOException {
-        int opc=0;
-        Scanner read = new Scanner(System.in);
-        File archivo = new File(nombreArchivo);
+        int opc;
         do {
             System.out.println("\t\tDatos de los alumnos");
-            System.out.println("Seleccione una opción");
             System.out.println(" 1) Agregar alumnos");
             System.out.println(" 2) Buscar alumno");
             System.out.println(" 3) Ordenar alumnos por edad");
             System.out.println(" 4) Filtrar alumnos por sexo");
             System.out.println(" 5) Modificar datos de un alumno");
             System.out.println(" 6) Salir");
-            boolean flag;
-            do
-            {
-                flag = true;
-                try {
-                	opc = LectoraTeclado.leeEnteroSimple();
-                } catch (ExcepcionLecturaEntrada ele){
-                    flag = false;
-                    System.err.println(ele.getMessage());
-                }
-            } while(!flag);
+            opc = Validar.entero("Seleccione una opción");
             switch(opc) {
                 case 1: // Agregar alumnos
                     agregarAlumnos();
@@ -87,102 +74,40 @@ public class Escuela {
                     break;
                 default:
                     System.out.println("Esa opción no es válida");
-                    break;
-                    
+                    break;      
             }
-        }while(opc != 6);
-    
+        }while(opc != 6);  
     }
     
     public static void agregarAlumnos() throws IOException {
         FileWriter fichero = null;
         PrintWriter pw = null;
-        Scanner read = new Scanner(System.in);
-        int cantidadAlumnos, codigoAlumno=0,edadAlumno=0;
-        String nombreAlumno = "", apellidoPaterno="",apellidoMaterno="",sexoAlumno = "";
-        System.out.println("¿Cuantos alumnos desea agregar?");
-        cantidadAlumnos = read.nextInt();
-        Alumno alumno[] = new Alumno[cantidadAlumnos];
         boolean flag;
+        Scanner read = new Scanner(System.in);
+        int cantidadAlumnos=0, codigoAlumno=0,edadAlumno=0, alumnoActual=0;
+        String nombreAlumno = "", apellidoPaterno="",apellidoMaterno="",sexoAlumno = "";
+        cantidadAlumnos = Validar.entero("¿Cuantos alumnos desea agregar?");
+        Alumno alumno[] = new Alumno[cantidadAlumnos];
         for(int i = 0 ; i<cantidadAlumnos ; i++){
+            alumnoActual = i+1;
+            System.out.println("Alumno [ " + alumnoActual + " ]");
+            codigoAlumno = Validar.entero("¿Cual es el código del alumno?");
+            nombreAlumno = Validar.cadena("¿Cual es el nombre del alumno?");
+            apellidoPaterno = Validar.cadena("¿Cual es el apellido paterno del alumno?");
+            apellidoMaterno = Validar.cadena("¿Cual es el apellido materno del alumno?");
+            edadAlumno = Validar.entero("¿Cual es la edad del alumno?");
             do
             {
-                flag = true;
-                System.out.println("Alumno [ " + i+1 + " ]");
-                System.out.println("¿Cual es el código del alumno?");
-                try {
-                    codigoAlumno = LectoraTeclado.leeEnteroSimple();
-                } catch (ExcepcionLecturaEntrada ele){
+                sexoAlumno = Validar.cadena("¿Cual es el sexo del alumno? [ masculino | femenino]");
+                if (sexoAlumno.equals("MASCULINO") || sexoAlumno.equals("FEMENINO") || sexoAlumno.equals("masculino") || sexoAlumno.equals("femenino")) {
+                    flag = true;
+                    sexoAlumno = sexoAlumno.toUpperCase();
+                } else {
                     flag = false;
-                    System.err.println(ele.getMessage());
-                }
-            } while(!flag);
-            
-            do
-            {
-                flag = true;
-                System.out.println("¿Cual es el nombre del alumno?");
-                try {
-                    nombreAlumno = LectoraTeclado.leeCadena();
-                } catch (ExcepcionLecturaEntrada ele){
-                    flag = false;
-                    System.err.println(ele.getMessage());
-                }
-            } while(!flag);
-            
-            do
-            {
-                flag = true;
-                System.out.println("¿Cual es el apellido paterno del alumno?");
-                try {
-                    apellidoPaterno = LectoraTeclado.leeCadena();
-                } catch (ExcepcionLecturaEntrada ele){
-                    flag = false;
-                    System.err.println(ele.getMessage());
-                }
-            } while(!flag);
-            
-            do
-            {
-                flag = true;
-                System.out.println("¿Cual es el apellido materno del alumno?");
-                try {
-                    apellidoMaterno = LectoraTeclado.leeCadena();
-                } catch (ExcepcionLecturaEntrada ele){
-                    flag = false;
-                    System.err.println(ele.getMessage());
+                    System.out.println("Debes ingresar alguna de estas opciones [ masculino | femenino]");
                 }
             } while(!flag);
 
-            do
-            {
-                flag = true;
-                System.out.println("¿Cual es la edad del alumno?");
-                try {
-                    edadAlumno = LectoraTeclado.leeEnteroSimple();
-                } catch (ExcepcionLecturaEntrada ele){
-                    flag = false;
-                    System.err.println(ele.getMessage());
-                }
-            } while(!flag);
-            
-            do
-            {
-                System.out.println("¿Cual es el sexo del alumno?");
-                try {
-                    sexoAlumno = LectoraTeclado.leeCadena();
-                    if (sexoAlumno.equals("MASCULINO") || sexoAlumno.equals("FEMENINO") || sexoAlumno.equals("masculino") || sexoAlumno.equals("femenino")) {
-                        flag = true;
-                        sexoAlumno = sexoAlumno.toUpperCase();
-                    } else {
-                        flag = false;
-                        System.out.println("Debes ingresar alguna de estas opciones [ masculino | femenino]");
-                    }
-                } catch (ExcepcionLecturaEntrada ele){
-                    flag = false;
-                    System.err.println(ele.getMessage());
-                }
-            } while(!flag);
             System.out.println("");
             alumno[i] = new Alumno(codigoAlumno,nombreAlumno,apellidoPaterno,apellidoMaterno,edadAlumno,sexoAlumno);
         }
@@ -191,14 +116,6 @@ public class Escuela {
             fichero = new FileWriter(nombreArchivo,true);
             pw = new PrintWriter(fichero);
             for(int i = 0 ; i<cantidadAlumnos ; i++){
-                /*
-                pw.println(alumno[i].getCodigo() + ":"
-                           +alumno[i].getNombre() + ":"
-                           +alumno[i].getApellidoPaterno()+ ":"
-                           +alumno[i].getApellidoMaterno()+ ":"
-                           +alumno[i].getEdad()+ ":"
-                           +alumno[i].getSexo()+ ";");
-                */
                 pw.println(alumno[i].getCodigo());
                 pw.println(alumno[i].getNombre());
                 pw.println(alumno[i].getApellidoPaterno());
@@ -239,19 +156,13 @@ public class Escuela {
             int totalAlumnos = 0;
             do
             {
-                System.out.println("¿Cual es el sexo de los alumnos que desea filtrar? [ masculino | femenino ]");
-                try {
-                    sexoAlumno = LectoraTeclado.leeCadena();
-                    if (sexoAlumno.equals("MASCULINO") || sexoAlumno.equals("FEMENINO") || sexoAlumno.equals("masculino") || sexoAlumno.equals("femenino")) {
-                        flag = true;
-                        sexoAlumno = sexoAlumno.toUpperCase();
-                    } else {
-                        flag = false;
-                        System.out.println("Debes ingresar alguna de estas opciones [ masculino | femenino ]");
-                    }
-                } catch (ExcepcionLecturaEntrada ele){
+                sexoAlumno = Validar.cadena("¿Cual es el sexo de los alumnos que desea filtrar? [ masculino | femenino]");
+                if (sexoAlumno.equals("MASCULINO") || sexoAlumno.equals("FEMENINO") || sexoAlumno.equals("masculino") || sexoAlumno.equals("femenino")) {
+                    flag = true;
+                    sexoAlumno = sexoAlumno.toUpperCase();
+                } else {
                     flag = false;
-                    System.err.println(ele.getMessage());
+                    System.out.println("Debes ingresar alguna de estas opciones [ masculino | femenino]");
                 }
             } while(!flag);
             try (FileReader fr = new FileReader(nombreArchivo)) {
@@ -306,11 +217,8 @@ public class Escuela {
     
     
     public static void buscarAlumnos() {
-        int buscarCodigo = 0;
+        int buscarCodigo = 0, numLine = 0, lineCount= 0;
         File archivo = new File(nombreArchivo);
-        boolean flag = false;
-        int numLine = 0;
-        int lineCount= 0;
         boolean encontrado = false;
         String line;
         if(!archivo.exists()) {
@@ -320,17 +228,7 @@ public class Escuela {
             try {
                 FileReader fr = new FileReader(nombreArchivo);
                 BufferedReader br = new BufferedReader(fr); 
-                do {
-                    flag = true;
-                    try {
-                        System.out.println("Cuál es el código de alumno que desea buscar");
-                        buscarCodigo = LectoraTeclado.leeEnteroSimple();
-                    } 
-                    catch (ExcepcionLecturaEntrada ele){
-                        flag = false;
-                        System.err.println(ele.getMessage());
-                    }
-                } while(!flag);
+                buscarCodigo = Validar.entero("Introduce el código que desea buscar");
                 while((br.readLine()) != null){
                     lineCount++;
                 }
@@ -338,31 +236,30 @@ public class Escuela {
                     line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLine);
                     if(buscarCodigo == Integer.parseInt(line)) {
                         encontrado = true;
-                        System.out.println("El código fue encontrado con exito");
-                        System.out.println("Código: " + line);
+                        System.out.println("\nEl código fue encontrado con exito\n");
+                        System.out.println("Código: " + line );
                         numLine++;
                                     
                         line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLine);
-                        System.out.println("Nombre: " + line);
+                        System.out.println("Nombre: " + line );
                         numLine++;
                                     
                         line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLine);
-                        System.out.println("Apellido paterno: " + line);
+                        System.out.println("Apellido paterno: " + line );
                         numLine++;
                                     
                         line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLine);
-                        System.out.println("Apellido Materno: " + line);
+                        System.out.println("Apellido Materno: " + line );
                         numLine++;
                                     
                         line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLine);
-                        System.out.println("Edad: " + line);
+                        System.out.println("Edad: " + line );
                         numLine++;
                                     
                         line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLine);
-                        System.out.println("Sexo: " + line);
+                        System.out.println("Sexo: " + line  + "\n");
                         break;
                     }
-                    //System.out.println(line);
                     numLine += 7;
                 }
                 if(!encontrado) {
@@ -375,8 +272,6 @@ public class Escuela {
             }
         }
     }
-    
-    
     
     public static void ordenarPorEdad() throws FileNotFoundException, IOException {
         int numLine = 0, lineCount, totalAlumnos;
@@ -423,19 +318,19 @@ public class Escuela {
                 numLine+=2;
             }
             Arrays.sort(list);
-            System.out.println("Alumnos Ordenados por edad");
+            System.out.println("\nAlumnos Ordenados por edad\n");
             Alumno.imprimeArray(list);
+            System.out.println("");
             fr.close();
         }
     }
     
     
     public static void modificarDatos() throws FileNotFoundException, IOException {
-        Scanner read = new Scanner(System.in);
         int buscarCodigo = 0;
         String nuevoDato="";
+        int nuevaEdad;
         File archivo = new File(nombreArchivo);
-        boolean flag = false;
         int numLine = 0,numLineAux,opc=0;
         int lineCount= 0;
         boolean encontrado = false;
@@ -458,21 +353,10 @@ public class Escuela {
             try {
                 FileReader fr = new FileReader(nombreArchivo);
                 BufferedReader br = new BufferedReader(fr); 
-                String inputStr = inputBuffer.toString();
                 int contador=1;
                 System.out.println(contador);
                 file.close();
-                do {
-                    flag = true;
-                    try {
-                        System.out.println("Introduce el codigo del alumno que deseas modificar");
-                        buscarCodigo = LectoraTeclado.leeEnteroSimple();
-                    } 
-                    catch (ExcepcionLecturaEntrada ele){
-                        flag = false;
-                        System.err.println(ele.getMessage());
-                    }
-                } while(!flag);
+                buscarCodigo = Validar.entero("Introduce el codigo del alumno que deseas modificar");
                 while((br.readLine()) != null){
                     lineCount++;
                 }
@@ -491,108 +375,58 @@ public class Escuela {
                             System.out.println("\t4) Edad");
                             System.out.println("\t5) Sexo");
                             System.out.println("\t6) Salir");
-                            do
-                            {
-                                flag = true;
-                                try {
-                                    opc = LectoraTeclado.leeEnteroSimple();
-                                } catch (ExcepcionLecturaEntrada ele){
-                                    flag = false;
-                                    System.err.println(ele.getMessage());
-                                }
-                            } while(!flag);
+                            opc = Validar.entero("Seleccione una opción");
                             switch(opc) {
                                 case 1:
                                     numLineAux = numLine + 1;
                                     line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLineAux);
                                     System.out.println("El actual nombre del alumno es " + line);
-                                    do
-                                    {
-                                        flag = true;
-                                        System.out.println("Introduce el nuevo nombre del alumno");
-                                        try {
-                                            nuevoDato = LectoraTeclado.leeCadena();
-                                        } catch (ExcepcionLecturaEntrada ele){
-                                            flag = false;
-                                            System.err.println(ele.getMessage());
+                                    nuevoDato = Validar.cadena("Introduce el nuevo nombre del alumno");
+                                    for (i = 0; i < fileContent.size(); i++) {
+                                        if (fileContent.get(i).equals(line)) {
+                                            fileContent.set(i, nuevoDato);
+                                            break;
                                         }
-                                    } while(!flag);
-                                    
-                                        for (i = 0; i < fileContent.size(); i++) {
-                                            if (fileContent.get(i).equals(line)) {
-                                                fileContent.set(i, nuevoDato);
-                                                break;
-                                            }
-                                        }
+                                    }
                                         Files.write(Paths.get(nombreArchivo), fileContent, StandardCharsets.UTF_8);
                                     break;
                                 case 2:
                                     numLineAux = numLine + 2;
                                     line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLineAux);
                                     System.out.println("El actual apellido paterno del alumno es " + line);
-                                    do
-                                    {
-                                        flag = true;
-                                        System.out.println("Introduce el nuevo apellido paterno del alumno");
-                                        try {
-                                            nuevoDato = LectoraTeclado.leeCadena();
-                                        } catch (ExcepcionLecturaEntrada ele){
-                                            flag = false;
-                                            System.err.println(ele.getMessage());
+                                    nuevoDato = Validar.cadena("Introduce el nuevo apellido paterno del alumno");
+                                    for (i = 0; i < fileContent.size(); i++) {
+                                        if (fileContent.get(i).equals(line)) {
+                                            fileContent.set(i, nuevoDato);
+                                            break;
                                         }
-                                    } while(!flag);
-                                        for (i = 0; i < fileContent.size(); i++) {
-                                            if (fileContent.get(i).equals(line)) {
-                                                fileContent.set(i, nuevoDato);
-                                                break;
-                                            }
-                                        }
-                                    Files.write(Paths.get(nombreArchivo), fileContent, StandardCharsets.UTF_8);
+                                    }
+                                        Files.write(Paths.get(nombreArchivo), fileContent, StandardCharsets.UTF_8);
                                     break;
                                 case 3:
                                     numLineAux = numLine + 3;
                                     line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLineAux);
                                     System.out.println("El actual apellido materno del alumno es " + line);
-                                    do
-                                    {
-                                        flag = true;
-                                        System.out.println("Introduce el nuevo apellido materno del alumno");
-                                        try {
-                                            nuevoDato = LectoraTeclado.leeCadena();
-                                        } catch (ExcepcionLecturaEntrada ele){
-                                            flag = false;
-                                            System.err.println(ele.getMessage());
+                                    nuevoDato = Validar.cadena("Introduce el nuevo apellido materno del alumno");
+                                    for (i = 0; i < fileContent.size(); i++) {
+                                        if (fileContent.get(i).equals(line)) {
+                                            fileContent.set(i, nuevoDato);
+                                            break;
                                         }
-                                    } while(!flag);
-                                        for (i = 0; i < fileContent.size(); i++) {
-                                            if (fileContent.get(i).equals(line)) {
-                                                fileContent.set(i, nuevoDato);
-                                                break;
-                                            }
-                                        }
+                                    }
                                         Files.write(Paths.get(nombreArchivo), fileContent, StandardCharsets.UTF_8);
                                     break;
                                 case 4:
                                     numLineAux = numLine + 4;
                                     line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLineAux);
                                     System.out.println("La edad actual del alumno es " + line);
-                                    do
-                                    {
-                                        flag = true;
-                                        System.out.println("Introduce la nueva edad del alumno");
-                                        try {
-                                            nuevoDato = String.valueOf(LectoraTeclado.leeEnteroSimple());
-                                        } catch (ExcepcionLecturaEntrada ele){
-                                            flag = false;
-                                            System.err.println(ele.getMessage());
+                                    nuevaEdad= Validar.entero("Introduce el nuevo apellido paterno del alumno");
+                                    for (i = 0; i < fileContent.size(); i++) {
+                                        if (fileContent.get(i).equals(line)) {
+                                            fileContent.set(i, String.valueOf(nuevaEdad));
+                                            break;
                                         }
-                                    } while(!flag);
-                                        for (i = 0; i < fileContent.size(); i++) {
-                                            if (fileContent.get(i).equals(line)) {
-                                                fileContent.set(i, nuevoDato);
-                                                break;
-                                            }
-                                        }
+                                    }
                                         Files.write(Paths.get(nombreArchivo), fileContent, StandardCharsets.UTF_8);
                                     break;
                                 case 5:
@@ -628,10 +462,12 @@ public class Escuela {
                 if(!encontrado) {
                     System.out.println("No se encontro ningun alumno con ese código");
                 }
+                br.close();
             }
             catch(IOException | NumberFormatException e) {
                 System.out.println("");
             }
         }
     }
+
 }
