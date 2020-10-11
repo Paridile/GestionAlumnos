@@ -1,22 +1,17 @@
 /*
-
 Crear un programa con manejo de archivos y arreglos en java que permita solicitar la cantidad de alumnos que 
 van a ser insertados en un archivo por cada alumno solicite como datos
-
 Código
 Nombre completo
 Edad
 Sexo
-
 Se almacenen los datos de estos alumnos en un archivo y posterior a ello muestre un menu con opciones de 
 buscar alumno por codigo, 
 ordenar alumnos por edad, 
 buscar alumnos por sexo y 
 modificar los datos de un alumno por código a
 si como poder salir del menu.
-
 El programa debe de estar validado y realizar todo lo que se pide
-
  */
 package escuela;
 
@@ -176,7 +171,6 @@ public class Escuela {
                 System.out.println("¿Cual es el sexo del alumno?");
                 try {
                     sexoAlumno = LectoraTeclado.leeCadena();
-                    System.out.println(":o :" + sexoAlumno);
                     if (sexoAlumno.equals("MASCULINO") || sexoAlumno.equals("FEMENINO") || sexoAlumno.equals("masculino") || sexoAlumno.equals("femenino")) {
                         flag = true;
                         sexoAlumno = sexoAlumno.toUpperCase();
