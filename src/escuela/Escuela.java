@@ -29,9 +29,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -443,17 +446,16 @@ public class Escuela {
         int lineCount= 0;
         boolean encontrado = false;
         
-        
+        StringBuffer inputBuffer = new StringBuffer();
         BufferedReader file = new BufferedReader(new FileReader(nombreArchivo));
         String lines;
-        StringBuffer inputBuffer = new StringBuffer();
         String line;
         
         
-        //while ((lines = file.readLine()) != null) {
-            //   inputBuffer.append(lines);
-          //     inputBuffer.append('\n');
-        //}
+        while ((lines = file.readLine()) != null) {
+            inputBuffer.append(lines);
+            inputBuffer.append('\n');
+        }
         
         if(!archivo.exists()) {
             System.out.println("El archivo " + nombreArchivo + " no fue encontrado");
@@ -462,7 +464,9 @@ public class Escuela {
             try {
                 FileReader fr = new FileReader(nombreArchivo);
                 BufferedReader br = new BufferedReader(fr); 
-                //String inputStr = inputBuffer.toString();
+                String inputStr = inputBuffer.toString();
+                int contador=1;
+                System.out.println(contador);
                 file.close();
                 do {
                     flag = true;
@@ -481,14 +485,11 @@ public class Escuela {
                 for(int i = 0; i<lineCount/7;i++) {
                     line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLine);
                     if(buscarCodigo == Integer.parseInt(line)) {
-                        RandomAccessFile fl = new RandomAccessFile(nombreArchivo, "rw");
-                        System.out.println(numLine);
-                        fl.seek(numLine);
-                        fl.writeBytes("QWE");
-                        fl.close();
                         encontrado = true;
                         numLineAux = numLine;
                         do {
+                            List<String> fileContent = new ArrayList<>(Files.readAllLines(Paths.get(nombreArchivo), StandardCharsets.UTF_8));
+                            contador = 0;
                             System.out.println("¿Que dato desea modificar?");
                             System.out.println("\t1) Nombre");
                             System.out.println("\t2) Apellido paterno");
@@ -511,34 +512,118 @@ public class Escuela {
                                     numLineAux = numLine + 1;
                                     line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLineAux);
                                     System.out.println("El actual nombre del alumno es " + line);
-                                    System.out.println("Introduce el nuevo nombre del alumno");
                                     do
                                     {
                                         flag = true;
-                                        System.out.println("¿Cual es el nombre del alumno?");
+                                        System.out.println("Introduce el nuevo nombre del alumno");
                                         try {
                                             nuevoDato = LectoraTeclado.leeCadena();
                                         } catch (ExcepcionLecturaEntrada ele){
-                                        flag = false;
-                                        System.err.println(ele.getMessage());
-                                    }
+                                            flag = false;
+                                            System.err.println(ele.getMessage());
+                                        }
                                     } while(!flag);
-                                    //inputStr = inputStr.replace(line,nuevoDato);
-                                    //FileOutputStream fileOut = new FileOutputStream(nombreArchivo);
-                                    //fileOut.write(inputStr.getBytes());
-                                    //fileOut.close();
+                                    
+                                        for (i = 0; i < fileContent.size(); i++) {
+                                            if (fileContent.get(i).equals(line)) {
+                                                fileContent.set(i, nuevoDato);
+                                                break;
+                                            }
+                                        }
+                                        Files.write(Paths.get(nombreArchivo), fileContent, StandardCharsets.UTF_8);
                                     break;
                                 case 2:
-                                    
+                                    numLineAux = numLine + 2;
+                                    line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLineAux);
+                                    System.out.println("El actual apellido paterno del alumno es " + line);
+                                    do
+                                    {
+                                        flag = true;
+                                        System.out.println("Introduce el nuevo apellido paterno del alumno");
+                                        try {
+                                            nuevoDato = LectoraTeclado.leeCadena();
+                                        } catch (ExcepcionLecturaEntrada ele){
+                                            flag = false;
+                                            System.err.println(ele.getMessage());
+                                        }
+                                    } while(!flag);
+                                        for (i = 0; i < fileContent.size(); i++) {
+                                            if (fileContent.get(i).equals(line)) {
+                                                fileContent.set(i, nuevoDato);
+                                                break;
+                                            }
+                                        }
+                                    Files.write(Paths.get(nombreArchivo), fileContent, StandardCharsets.UTF_8);
                                     break;
                                 case 3:
+                                    numLineAux = numLine + 3;
+                                    line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLineAux);
+                                    System.out.println("El actual apellido materno del alumno es " + line);
+                                    do
+                                    {
+                                        flag = true;
+                                        System.out.println("Introduce el nuevo apellido materno del alumno");
+                                        try {
+                                            nuevoDato = LectoraTeclado.leeCadena();
+                                        } catch (ExcepcionLecturaEntrada ele){
+                                            flag = false;
+                                            System.err.println(ele.getMessage());
+                                        }
+                                    } while(!flag);
+                                        for (i = 0; i < fileContent.size(); i++) {
+                                            if (fileContent.get(i).equals(line)) {
+                                                fileContent.set(i, nuevoDato);
+                                                break;
+                                            }
+                                        }
+                                        Files.write(Paths.get(nombreArchivo), fileContent, StandardCharsets.UTF_8);
                                     break;
                                 case 4:
+                                    numLineAux = numLine + 4;
+                                    line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLineAux);
+                                    System.out.println("La edad actual del alumno es " + line);
+                                    do
+                                    {
+                                        flag = true;
+                                        System.out.println("Introduce la nueva edad del alumno");
+                                        try {
+                                            nuevoDato = String.valueOf(LectoraTeclado.leeEnteroSimple());
+                                        } catch (ExcepcionLecturaEntrada ele){
+                                            flag = false;
+                                            System.err.println(ele.getMessage());
+                                        }
+                                    } while(!flag);
+                                        for (i = 0; i < fileContent.size(); i++) {
+                                            if (fileContent.get(i).equals(line)) {
+                                                fileContent.set(i, nuevoDato);
+                                                break;
+                                            }
+                                        }
+                                        Files.write(Paths.get(nombreArchivo), fileContent, StandardCharsets.UTF_8);
                                     break;
                                 case 5:
-                                    break;
-                                case 6:
-                                default:
+                                    numLineAux = numLine + 5;
+                                    line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLineAux);
+                                    System.out.println("El sexo actual del alumno es " + line);
+                                    if(line == "M"){
+                                        nuevoDato = "F";
+                                        System.out.println("El sexo fue cambiado a F");
+                                    }
+                                    if(line == "F") {
+                                        nuevoDato = "M";
+                                        System.out.println("El sexo fue cambiado a M");
+                                    }
+                                    if(line != "M" && line != "F"){
+                                        nuevoDato = "M";
+                                        System.out.println(":o");
+                                    }
+                                    for (i = 0; i < fileContent.size(); i++) {
+                                        if (fileContent.get(i).equals(line)) {
+                                            fileContent.set(i, nuevoDato);
+                                            break;
+                                        }
+                                    }
+                                    Files.write(Paths.get(nombreArchivo), fileContent, StandardCharsets.UTF_8);
                                     break;
                             }
                         }while(opc!=6);
