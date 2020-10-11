@@ -51,7 +51,7 @@ public class Validar {
                     for(int i = 0; i<texto.length();i++) {
                         char caracter = texto.toUpperCase().charAt(i);
 			            int valorASCII = (int)caracter;
-			            if (valorASCII != 165 && (valorASCII < 65 || valorASCII > 90)){
+			            if (valorASCII != 165 && valorASCII != 32 && (valorASCII < 65 || valorASCII > 90)){
                             flag = false;
                             System.err.println("La cadena solamente debe incluir letras");
                             break;

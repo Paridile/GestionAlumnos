@@ -9,10 +9,11 @@ Se almacenen los datos de estos alumnos en un archivo y posterior a ello muestre
 buscar alumno por codigo, 
 ordenar alumnos por edad, 
 buscar alumnos por sexo y 
-modificar los datos de un alumno por código a
-si como poder salir del menu.
+modificar los datos de un alumno por código
+asi como poder salir del menu.
 El programa debe de estar validado y realizar todo lo que se pide
  */
+
 package escuela;
 
 import java.io.BufferedReader;
@@ -82,7 +83,7 @@ public class Escuela {
     public static void agregarAlumnos() throws IOException {
         FileWriter fichero = null;
         PrintWriter pw = null;
-        boolean flag;
+        boolean flag=false;
         Scanner read = new Scanner(System.in);
         int cantidadAlumnos=0, codigoAlumno=0,edadAlumno=0, alumnoActual=0;
         String nombreAlumno = "", apellidoPaterno="",apellidoMaterno="",sexoAlumno = "";
@@ -91,7 +92,9 @@ public class Escuela {
         for(int i = 0 ; i<cantidadAlumnos ; i++){
             alumnoActual = i+1;
             System.out.println("Alumno [ " + alumnoActual + " ]");
-            codigoAlumno = Validar.entero("¿Cual es el código del alumno?");
+            do{
+                codigoAlumno = Validar.entero("¿Cual es el código del alumno?");
+            }while(buscarAlumnos(codigoAlumno));
             nombreAlumno = Validar.cadena("¿Cual es el nombre del alumno?");
             apellidoPaterno = Validar.cadena("¿Cual es el apellido paterno del alumno?");
             apellidoMaterno = Validar.cadena("¿Cual es el apellido materno del alumno?");
@@ -272,6 +275,42 @@ public class Escuela {
             }
         }
     }
+
+    public static boolean buscarAlumnos(int buscarCodigo) {
+        int numLine = 0, lineCount= 0;
+        File archivo = new File(nombreArchivo);
+        boolean encontrado = false;
+        String line;
+        if(!archivo.exists()) {
+            System.out.println("El archivo " + nombreArchivo + " no fue encontrado");
+        }
+        else {
+            try {
+                FileReader fr = new FileReader(nombreArchivo);
+                BufferedReader br = new BufferedReader(fr); 
+                while((br.readLine()) != null){
+                    lineCount++;
+                }
+                for(int i = 0; i<lineCount/7;i++) {
+                    line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLine);
+                    if(buscarCodigo == Integer.parseInt(line)) {
+                        encontrado = true;
+                        System.err.println("Ya existe un alumno con ese código");
+                        break;
+                    }
+                    numLine += 7;
+                }
+                if(!encontrado) {
+                    
+                }
+                fr.close();
+            }
+            catch(IOException | NumberFormatException e) {
+                System.out.println("");
+            }
+        }
+        return encontrado;
+    }
     
     public static void ordenarPorEdad() throws FileNotFoundException, IOException {
         int numLine = 0, lineCount, totalAlumnos;
@@ -420,7 +459,7 @@ public class Escuela {
                                     numLineAux = numLine + 4;
                                     line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLineAux);
                                     System.out.println("La edad actual del alumno es " + line);
-                                    nuevaEdad= Validar.entero("Introduce el nuevo apellido paterno del alumno");
+                                    nuevaEdad= Validar.entero("Introduce la nueva edad del alumno");
                                     for (i = 0; i < fileContent.size(); i++) {
                                         if (fileContent.get(i).equals(line)) {
                                             fileContent.set(i, String.valueOf(nuevaEdad));
