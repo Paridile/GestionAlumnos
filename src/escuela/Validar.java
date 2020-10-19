@@ -32,7 +32,7 @@ public class Validar {
                     }
                 }
                 catch(NumberFormatException e){
-                    System.err.println("Debes ingresar un entero " + e);
+                    System.err.println("Debes ingresar un entero ");
                     flag = false;
                 }
         }while(!flag);
@@ -59,7 +59,7 @@ public class Validar {
                     }
                 }
                 catch(NumberFormatException e){
-                    System.err.println("Debes ingresar un entero " + e);
+                    System.err.println("Cadena no valida " + e);
                     flag = false;
                 }
         }while(!flag);

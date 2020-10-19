@@ -29,7 +29,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  *
@@ -84,7 +83,6 @@ public class Escuela {
         FileWriter fichero = null;
         PrintWriter pw = null;
         boolean flag=false;
-        Scanner read = new Scanner(System.in);
         int cantidadAlumnos=0, codigoAlumno=0,edadAlumno=0, alumnoActual=0;
         String nombreAlumno = "", apellidoPaterno="",apellidoMaterno="",sexoAlumno = "";
         cantidadAlumnos = Validar.entero("¿Cuantos alumnos desea agregar?");
@@ -94,7 +92,7 @@ public class Escuela {
             System.out.println("Alumno [ " + alumnoActual + " ]");
             do{
                 codigoAlumno = Validar.entero("¿Cual es el código del alumno?");
-            }while(buscarAlumnos(codigoAlumno));
+            }while(buscarAlumnos(codigoAlumno, alumno));
             nombreAlumno = Validar.cadena("¿Cual es el nombre del alumno?");
             apellidoPaterno = Validar.cadena("¿Cual es el apellido paterno del alumno?");
             apellidoMaterno = Validar.cadena("¿Cual es el apellido materno del alumno?");
@@ -276,10 +274,10 @@ public class Escuela {
         }
     }
 
-    public static boolean buscarAlumnos(int buscarCodigo) {
+    public static boolean buscarAlumnos(int buscarCodigo, Alumno alumno[]) {
         int numLine = 0, lineCount= 0;
         File archivo = new File(nombreArchivo);
-        boolean encontrado = false;
+        boolean encontrado = false, encontradoArray=false;
         String line;
         if(!archivo.exists()) {
             System.out.println("El archivo " + nombreArchivo + " no fue encontrado");
@@ -288,20 +286,31 @@ public class Escuela {
             try {
                 FileReader fr = new FileReader(nombreArchivo);
                 BufferedReader br = new BufferedReader(fr); 
-                while((br.readLine()) != null){
-                    lineCount++;
-                }
-                for(int i = 0; i<lineCount/7;i++) {
-                    line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLine);
-                    if(buscarCodigo == Integer.parseInt(line)) {
-                        encontrado = true;
-                        System.err.println("Ya existe un alumno con ese código");
+                try{
+                for(Alumno i: alumno){
+                    if(buscarCodigo == i.getCodigo()){
+                        encontradoArray = true;
                         break;
                     }
-                    numLine += 7;
                 }
-                if(!encontrado) {
-                    
+                }catch(NullPointerException e){}
+                if(!encontradoArray){
+                    while((br.readLine()) != null){
+                        lineCount++;
+                    }
+                    for(int i = 0; i<lineCount/7;i++) {
+                        line = Files.readAllLines(Paths.get(nombreArchivo)).get(numLine);
+                        if(buscarCodigo == Integer.parseInt(line)) {
+                            encontrado = true;
+                            System.err.println("Ya existe un alumno con ese código");
+                            break;
+                        }
+                        numLine += 7;
+                    }
+                }
+                else {
+                    System.err.println("Acabas de registrar un alumno con ese código");
+                    encontrado = true;
                 }
                 fr.close();
             }
@@ -508,5 +517,10 @@ public class Escuela {
             }
         }
     }
+
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
+    }  
 
 }
